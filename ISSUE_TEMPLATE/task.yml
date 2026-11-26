@@ -1,0 +1,29 @@
+name: Task
+description: A parent task for a team lead to split and delegate
+title: "[task] "
+body:
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options: [sde, ml]
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Testable checklist.
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope

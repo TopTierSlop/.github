@@ -1,0 +1,47 @@
+name: Agent status
+description: Structured agent status update (see prompts/status-format.md)
+title: "[status] "
+body:
+  - type: input
+    id: from
+    attributes:
+      label: FROM
+      placeholder: "sde-lead | ml-lead | worker-1"
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: STATUS
+      options: [claimed, blocked, done, question]
+    validations:
+      required: true
+  - type: input
+    id: issue
+    attributes:
+      label: ISSUE
+      placeholder: "#123"
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: BRANCH
+      placeholder: 123-short-slug
+  - type: input
+    id: pr
+    attributes:
+      label: PR
+      placeholder: "#456 or none"
+  - type: input
+    id: to
+    attributes:
+      label: TO
+      description: Agent/role for questions
+  - type: textarea
+    id: note
+    attributes:
+      label: NOTE
+      description: Max 2 lines.
+    validations:
+      required: true
