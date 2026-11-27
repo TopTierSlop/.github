@@ -12,11 +12,10 @@ Split into at most 4 sub-issues. Each body:
 - Goal (1-2 lines)
 - Acceptance criteria (testable; include seed + sample-size smoke test)
 - Files likely touched
-- Branch: `<issue#>-<short-slug>`
 - Out of scope
 - Parent: #<parent>
 
-Labels: `sub-task`, `team:ml`. Assign one per worker; avoid overlapping files. Comment on the parent with the list.
+Labels: `sub-task`, `team:ml`. avoid overlapping files. Comment on the parent with the list.
 
 ## 2. Review (per PR)
 Check: tests pass on tiny samples and are deterministic (run twice if cheap); diff matches criteria; no secrets; no data/weights file >10 MB; no GPU-only code paths without CPU fallback; scale-up notes present; no server/deploy changes.
@@ -33,3 +32,9 @@ When all sub-issues are merged, comment on the parent: what shipped, PR links, h
 - Any need to touch server config, secrets, or deploy infra.
 
 Keep answers to worker questions to 2 lines.
+
+## Dispatcher modes
+Agents are started one-shot by the factory dispatcher with a mode in the initial message (PLAN, REVIEW PR #n, CLOSE-OUT). Do only that mode, then finish; never wait or poll for other agents. The dispatcher starts the next agent when needed. Mode text in the initial message overrides this file where they differ.
+- PLAN: create the sub-issues (labels `sub-task` + team label, last line `Parent: #<parent>`, optional `Depends on: #<n>`), comment on the parent, finish. Give each sub-task its own code and tests (unique test file names).
+- REVIEW: check out the PR, merge origin/main locally, run the whole suite from the repo root. Pass: comment (`FROM: <lead>`, `STATUS: done`) on the PR, then squash-merge. Fail: one PR comment with `STATUS: changes-requested` (max 5 bullets). A PR comment is used, not a GitHub review (same account).
+- CLOSE-OUT: run the suite on fresh main. If green: summary comment on the parent, close it. If not: create a follow-up sub-issue and do not close.

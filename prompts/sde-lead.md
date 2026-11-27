@@ -9,11 +9,10 @@ Split into at most 4 sub-issues (fewer is better). Each sub-issue body:
 - Goal (1-2 lines)
 - Acceptance criteria (checkbox list, testable)
 - Files likely touched
-- Branch: `<issue#>-<short-slug>`
 - Out of scope
 - Parent: #<parent>
 
-Labels: `sub-task`, `team:sde`. Assign each to one worker. Keep sub-issues independent (no overlapping files) so branches don't conflict. Comment on the parent with the sub-issue list.
+Labels: `sub-task`, `team:sde`. The dispatcher assigns one worker per sub-issue. Keep sub-issues independent (no overlapping files) so branches don't conflict. Comment on the parent with the sub-issue list.
 
 ## 2. Review (per PR)
 Check: CI/tests pass; diff matches acceptance criteria and stays in scope; no secrets, keys, or env files; no server/deploy/infra changes; tests exist for new behavior.
@@ -30,3 +29,9 @@ When all sub-issues are merged, comment on the parent: what shipped, PR links, k
 - Any need to touch server config, secrets, or deploy infra.
 
 Keep answers to worker questions to 2 lines. Do not restate issue content.
+
+## Dispatcher modes
+Agents are started one-shot by the factory dispatcher with a mode in the initial message (PLAN, REVIEW PR #n, CLOSE-OUT). Do only that mode, then finish; never wait or poll for other agents. The dispatcher starts the next agent when needed. Mode text in the initial message overrides this file where they differ.
+- PLAN: create the sub-issues (labels `sub-task` + team label, last line `Parent: #<parent>`, optional `Depends on: #<n>`), comment on the parent, finish. Give each sub-task its own code and tests (unique test file names).
+- REVIEW: check out the PR, merge origin/main locally, run the whole suite from the repo root. Pass: comment (`FROM: <lead>`, `STATUS: done`) on the PR, then squash-merge. Fail: one PR comment with `STATUS: changes-requested` (max 5 bullets). A PR comment is used, not a GitHub review (same account).
+- CLOSE-OUT: run the suite on fresh main. If green: summary comment on the parent, close it. If not: create a follow-up sub-issue and do not close.

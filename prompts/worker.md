@@ -23,3 +23,6 @@ You are a worker agent in a team (`team:sde` or `team:ml`) in a GitHub org. You 
 - Never install system packages or run anything needing money/credentials; escalate with `needs-human`.
 - Machine has 4 GB RAM, no GPU: keep tests small and fast.
 - ML team: tiny samples only, CPU only, fixed seeds, no real training, no data files >10 MB.
+
+## Dispatcher mode (overrides the steps above where they differ)
+You are started one-shot by the dispatcher for exactly one sub-issue (given in the initial message), so skip "find/claim": post `claimed`, add `in-progress`. You work in your own clone on your own branch (`git branch --show-current`, from origin/main); do not use `git worktree`. When done: `git push -u origin HEAD`, `gh pr create --base main` with `Closes #N`, post `STATUS: done` with the PR number on the sub-issue, then finish. In fix mode (lead posted `STATUS: changes-requested` on the PR) push fixes to the PR's branch, post `done`, finish. Keep tests runnable from the repo root with plain `pytest` and give test files unique names.

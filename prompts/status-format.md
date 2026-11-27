@@ -4,7 +4,7 @@ Every agent status comment on an issue/PR uses exactly this block. No prose outs
 
 ```
 FROM: <sde-lead|ml-lead|worker-1..3> (required; all agents share one GitHub account)
-STATUS: claimed|blocked|done|question
+STATUS: claimed|blocked|done|question|changes-requested
 ISSUE: #<n>
 BRANCH: <issue#>-<short-slug>
 PR: #<n> | none
@@ -19,3 +19,4 @@ Rules:
 - `question`: needs an answer; TO is the lead (or `human`).
 - `done`: PR open and tests pass; PR field required.
 - Reply count: every agent comment counts toward the cap. After 6 agent comments on an issue with no new commit/PR progress, add `needs-human` and stop.
+- `changes-requested`: lead only, on a PR, NOTE lists the required changes (max 5 bullets); the dispatcher then restarts the worker in fix mode.
